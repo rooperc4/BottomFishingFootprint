@@ -1,0 +1,10 @@
+Package: BottomFishingFootprint
+Title: Creates A Bottom Fishing Footprint From Spatially Explicit Effort Data
+Version: 0.0.0.9000
+Authors@R: person("Chris", "Rooper", email = "Chris.Rooper@dfo-mpo.gc.ca", role = c("aut", "cre"))
+Description: The objective of this package is to provide tools that will help us define and map the appropriate temporal and spatial footprint for bottom contacting fishing gear for the NPFC convention area.
+Depends: R (>= 3.5.1)
+License: GPLv3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
