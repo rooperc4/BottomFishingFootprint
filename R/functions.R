@@ -146,8 +146,8 @@ for(i in 1:length(years)){
     if(dim(fishing_footprint_sub)[1]==0){ print(paste("Not enough vessels to plot",years[i],gear_types[j],"data",sep=" "))}
   }}
 
-load("data/map4.rda")
-load("data/Emporer.rda")
+data(map4)
+data(Emporer)
 res1<-paste(round(Spatial_resolution,2),Units,sep="_")
 if(Units=="m"){raster.stack<-projectRaster(raster.stack,crs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")}
 rtp <- rasterToPolygons(raster.stack,na.rm=FALSE)
