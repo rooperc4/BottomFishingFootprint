@@ -48,8 +48,9 @@ In the intervening month(s), I have written a package for R that will allow each
 To install the package run
 ```{r install}
 
-# install.packages("devtools")
-#devtools::install_github("rooperc4/BottomFishingFootprint")
+#install.packages("devtools")
+devtools::install_github("rooperc4/BottomFishingFootprint")
+library(BottomFishingFootprint)
 
 ```
 
@@ -233,7 +234,7 @@ rasters_isea13<-footprint_map(example_isea13)
 
 For the sample data, there are a lot of grid cells with not enough vessels for each method. Unsurprisingly, the higher resolution data is better for identifying the spatial extent of the footprint (ISEA and 8 km grids), but either the temporal resolution suffers or a lot of grid cells are missing. 
 
-Here's a look at the relationship between resolution and number of cells excluded using the sample data.
+Here's a look at the relationship between resolution and number of cells excluded using the sample data for a number of different combinations of spatial resolution and temporal resolution.
 
 ```{r sampleplots, echo=FALSE}
 spatialres<-seq(0.05,.5,.05)
@@ -260,10 +261,11 @@ map_projection_dd<-"+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 example_dd<-footprint_data(effort_data$Year,effort_data$Longitude,effort_data$Latitude,effort_data$Gear_type,effort_data$Vessel,Minimum_vessels,Start_year,Years_to_combine,Spatial_resolution_dd$Spatial_resolution,Spatial_resolution_dd$Units, map_projection=map_projection_dd)
 resdata[k,1]<-tempres[j]
 resdata[k,2]<-spatialres[i]
-resdata[k,3]<-sum(example_dd$not_enough_vessels)
+resdata[k,3]<-sum(example_dd$not_enough_vessels)/(length(example_dd$fishing_footprint_table[,1])+sum(example_dd$not_enough_vessels))
 k<-k+1
   }}
 
-ggplot(resdata)+geom_line(aes(x=Spres,y=GDM,color=as.factor(Tres)))
+ggplot(resdata)+geom_line(aes(x=Spres,y=GDM,color=as.factor(Tres)))+xlab("Spatial resolution (decimal degrees)")+
+  ylab("Proportion of cells with less than the minimum vessels")+labs(color="Years aggregated")
 
 ```
