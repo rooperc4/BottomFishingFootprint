@@ -150,6 +150,7 @@ data(map4)
 data(Emporer)
 res1<-paste(round(Spatial_resolution,2),Units,sep="_")
 if(Units=="m"){raster.stack<-projectRaster(raster.stack,crs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")}
+extent2<-extent(raster.stack)
 rtp <- rasterToPolygons(raster.stack,na.rm=FALSE)
 minsets<-min(minValue(raster.stack))
 maxsets<-max(maxValue(raster.stack))
@@ -159,8 +160,8 @@ for(i in 1:length(names(raster.stack))){
   year1<-gsub(".","-",year1,fixed=TRUE)
   gear1<-gsub("."," ",gear1,fixed=TRUE)
   notenough<-footprint_data_object$not_enough_vessels[row.names(footprint_data_object$not_enough_vessels)==year1,colnames(footprint_data_object$not_enough_vessels)==gear1]
-  if(extent1[1,]<0){map4<-map4}
-  if(extent1[1,]>0){map4<-Emporer}
+  if(extent2[1]<0){map4<-map4}
+  if(extent2[1]>0){map4<-Emporer}
   r<-rtp[i]
   m1<-ggmap(map4)+geom_polygon(data = r,
                                aes(x = long, y = lat,group=group,fill = rep(r@data[[1]],each=5)),
