@@ -2,7 +2,7 @@
 title: "BottomFishingFootprint-NPFC"
 author: "Chris Rooper"
 date: '`r format(Sys.Date(), "%B %d, %Y")`'
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
@@ -17,20 +17,16 @@ library(maps)
 library(dismo)
 library(gstat)
 library(proj4)
-#library(gfdata)
 library(ggmap)
 library(rasterVis)
 library(viridis)
-#library(lemon)
-
- require(plyr)
+require(plyr)
 library(dggridR)
 library(dplyr)
-require(xlsx)
- library(gridGraphics)
- library(grid)
- library(gridExtra)
-source("C:/github/NPFC_BottomFishingFootprint/R/functions.R")
+#library(gridGraphics)
+#library(grid)
+#library(gridExtra)
+
 #rm(list=ls())
 ```
 
@@ -47,13 +43,13 @@ Option 3: A spatial resolution of 0.1 degrees longitude by 0.1 degrees latitude 
 Option 4: A geodesic hexagonal mesh with resolution level 12 or 13 of ISEA3H grid type (described at https://github.com/r-barnes/dggridR/) and a 5 year temporal resolution
 
 
-In the intervening month(s), I have written a package for R that will allow each of us to test the output maps and data from each of these options (plus others that you would like to explore). The package can be downloaded at https://github.com/rooperc4/NPFC_BottomFishingFootprint/ or the code can be run from the example below. The objective of this package is to provide tools that will help us define and map the appropriate temporal and spatial footprint for bottom contacting fishing gear for the NPFC convention area. 
+In the intervening month(s), I have written a package for R that will allow each of us to test the output maps and data from each of these options (plus others that you would like to explore). The package can be downloaded at https://github.com/rooperc4/BottomFishingFootprint/ or the code can be run from the example below. The objective of this package is to provide tools that will help us define and map the appropriate temporal and spatial footprint for bottom contacting fishing gear for the NPFC convention area. 
 
 To install the package run
 ```{r install}
 
 # install.packages("devtools")
-#devtools::install_github("rooperc4/NPFC_BottomFishingFootprint")
+#devtools::install_github("rooperc4/BottomFishingFootprint")
 
 ```
 
@@ -91,7 +87,7 @@ The package has two main functions. The first is called footprint_data. This fun
 
 The function outputs a list of eight data objects that include a data frame of raw fishing effort data (fishing_effort_data) summarized to the spatial resolution provided for each fishing event with an additional column for the year group to which the event belongs. There should be one record in this table for each of the fishing events that were input. This table may not be appropriate to share with the NPFC, as it will contain records for grid cells where fewer than the minimum number of vessels fished. The second data object output by the function (fishing_footprint_table) is a table that summarizes the fishing events by year group, latitude, longitude and gear type. This table produces the number of sets that occurred in each year by each gear type at a grid cell with the spatial resolution specified and the center position given by the latitude and longitude where it was grouped. In addition, a column specifies the number of vessels that are included at each grid cell. The table will not include grid cells where there were fewer than the minimum number of vessels fishing. This table may be appropriate for sharing with the wider group, as it will meet confidentiality rules. The third item is a table of the number of grid cells by gear type and year group where the minimum number of vessels was not met (not_enough_vessels). This table indicates how many grid cells for which data exists, but cannot be reported. The fourth item is the year groups identified from the inputs (years) and the fifth item is the gear types represented in the data (gear_types). The last three items are the spatial resolution and units of the data summary and the map projection of the data (map_projection). These last items are for tracking inputs and outputs and are needed for creating the figures using the footprint_map function.
 
-The second function is called footprint_map. This function takes the fishing effort data object (created by the footprint_data function) and makes a raster map of the effort data. The outputs are a raster stack with layers for each year group and gear type combination and a .png figure for each year group and gear type combination. The .png object is overlaid on a static google map of the eastern or western Pacific, based on the input longitude values of the data. The footprint_data_object must be a list including a data frame of raw fishing effort data (Fishing_effort_data), spatially, temporally effort data compiled by gear type (fishing_footprint_table), the number of grid cells where their are not enough vessels represented to plot the data due to confidentiality rules (not_enough_vessels), gear type-year-year groups over which the data is summarized (years), gear types over which the data is summarized (gear_types), the spatial resolution of the data summary, the spatial resolution units (units) and the map projection of the data (map_projection). These 8 items are ouput from the footprint_data function.
+The second function is called footprint_map. This function takes the fishing effort data object (created by the footprint_data function) and makes a raster map of the effort data. The outputs are a raster stack with layers for each year group and gear type combination and a .png figure for each year group and gear type combination. The .png object is overlaid on a static google map of the eastern or western Pacific, based on the input longitude values of the data. The footprint_data_object must be a list including a data frame of raw fishing effort data (fishing_effort_data), spatially, temporally effort data compiled by gear type (fishing_footprint_table), the number of grid cells where their are not enough vessels represented to plot the data due to confidentiality rules (not_enough_vessels), gear type-year-year groups over which the data is summarized (years), gear types over which the data is summarized (gear_types), the spatial resolution of the data summary, the spatial resolution units (units) and the map projection of the data (map_projection). These 8 items are output from the footprint_data function.
 
 
 # Results
@@ -100,7 +96,7 @@ The second function is called footprint_map. This function takes the fishing eff
 
 To do option 1, run this code. 
 
-```{r option1}
+```{r option1, message=FALSE}
 #Specify the input spatial resolution and units
 Spatial_resolution_dd<-data.frame(Spatial_resolution=.5,Units="dd")
 
@@ -137,7 +133,7 @@ rasters_dd<-footprint_map(example_dd)
 
 To do option 2 run this code.
 
-```{r option2}
+```{r option2, message=FALSE}
 Spatial_resolution_m<-data.frame(Spatial_resolution=8000,Units="m")
 
 Start_year<-1991
@@ -166,7 +162,7 @@ rasters_m<-footprint_map(example_m)
 ## Option 3: A spatial resolution of 0.1 degrees longitude by 0.1 degrees latitude and a temporal resolution of 5 years
 To do option 3 run this code.
 
-```{r option3}
+```{r option3, message=FALSE}
 Spatial_resolution_dd<-data.frame(Spatial_resolution=.1,Units="dd")
 
 Start_year<-1991
@@ -192,9 +188,9 @@ rasters_dd2<-footprint_map(example_dd2)
 
 ## Option 4: A geodesic hexagonal mesh with resolution level 12 or 13 of ISEA3H grid type (described at https://github.com/r-barnes/dggridR/) and a 5 year temporal resolution
 
-For Option 4, the spatial resolution is quite small. Thus a five year temporal resolution for this example data takes a really long time (for the actual data, it works fine). In this example I set the years to combine to 30 years. and ran this code.
+For Option 4, the spatial resolution is quite small. Thus a five year temporal resolution for this example data takes a really long time (for the actual data, it works fine). In this example I set the years to combine to 30 years. and ran this code. Additionally, although the data are generated on the ISEA 12 and 13 scale, I plotted them using grid cell sizes of 0.08 and 0.05 decimal degrees respectively. This was used for visualization only, the data in the fishing_footprint_object is the actual ISEA 12 and 13 standard.
 
-```{r option4}
+```{r option4, message=FALSE}
 
 Spatial_resolution_ISEA12<-data.frame(Spatial_resolution=NA,Units="ISEA_12")
 Spatial_resolution_ISEA13<-data.frame(Spatial_resolution=NA,Units="ISEA_13")
@@ -235,8 +231,39 @@ rasters_isea13<-footprint_map(example_isea13)
 
 # Conclusions
 
-For the sample data, there are a lot of grid cells with not enough vessels for each method. The higher resolution data is better for identifying the spatial extent of the footprint (ISEA and 8 km grids), but either the temporal resolution suffers or a lot of grid cells are missing. 
+For the sample data, there are a lot of grid cells with not enough vessels for each method. Unsurprisingly, the higher resolution data is better for identifying the spatial extent of the footprint (ISEA and 8 km grids), but either the temporal resolution suffers or a lot of grid cells are missing. 
 
-If you have any concerns or questions, please let me know. As Takeshige-san mentioned, it is important to note that these data are only to be used within the NPFC science committee and for SAI assessments.
-Thank you,
-Chris
+Here's a look at the relationship between resolution and number of cells excluded using the sample data.
+
+```{r sampleplots, echo=FALSE}
+spatialres<-seq(0.05,.5,.05)
+tempres<-seq(5,30,5)
+resdata<-data.frame(array(dim=c(0,3)))
+k<-1
+colnames(resdata)<-c("Tres","Spres","GDM")
+for(i in 1:length(spatialres)){
+  for(j in 1:length(tempres)){
+    
+Spatial_resolution_dd<-data.frame(Spatial_resolution=spatialres[i],Units="dd")
+
+#Specify the start year and the number of years to combine
+Start_year<-1991
+Years_to_combine<-tempres[j]
+
+#What is the minimum number of vessels that need to fish a grid cell in order for the data to be shared
+Minimum_vessels<-3
+
+#Specify the map projection or crs in proj4 format
+map_projection_dd<-"+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+
+#Call the function
+example_dd<-footprint_data(effort_data$Year,effort_data$Longitude,effort_data$Latitude,effort_data$Gear_type,effort_data$Vessel,Minimum_vessels,Start_year,Years_to_combine,Spatial_resolution_dd$Spatial_resolution,Spatial_resolution_dd$Units, map_projection=map_projection_dd)
+resdata[k,1]<-tempres[j]
+resdata[k,2]<-spatialres[i]
+resdata[k,3]<-sum(example_dd$not_enough_vessels)
+k<-k+1
+  }}
+
+ggplot(resdata)+geom_line(aes(x=Spres,y=GDM,color=as.factor(Tres)))
+
+```
