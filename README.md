@@ -37,10 +37,6 @@ To install the package run
 
     #install.packages("devtools")
     devtools::install_github("rooperc4/BottomFishingFootprint")
-
-    ## Skipping install of 'BottomFishingFootprint' from a github remote, the SHA1 (daf77155) has not changed since last install.
-    ##   Use `force = TRUE` to force installation
-
     library(BottomFishingFootprint)
 
 Methods
