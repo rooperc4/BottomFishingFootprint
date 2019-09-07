@@ -168,8 +168,8 @@ for(i in 1:length(names(raster.stack))){
                                size = 0,
                                alpha = .75) +
     scale_fill_gradientn("Number Of Sets", colors = inferno(30),na.value=NA,limits=c(minsets,maxsets))+xlab("Longitude")+ylab("Latitude")
-  if(extent1[1,]<0){ m1<-m1+annotate("text",-140,55,label=year1,color="white",size=4)+annotate("text",-140,53,label=gear1,color="white",size=4)+annotate("text",-138,51,label=paste("Grid cells < minimum vessels = ",notenough,sep=""),color="white",size=3)+theme(panel.background=element_rect(fill="transparent",colour=NA),legend.position="bottom")}
-  if(extent1[1,]>0){ m1<-m1+annotate("text",160,50,label=year1,color="white",size=4)+annotate("text",160,49,label=gear1,color="white",size=4)+annotate("text",175,49,label=paste("Grid cells < minimum vessels = ",notenough,sep=""),color="white",size=3)+theme(panel.background=element_rect(fill="transparent",colour=NA),legend.position="bottom")}
+  if(extent2[1]<0){ m1<-m1+annotate("text",-140,55,label=year1,color="white",size=4)+annotate("text",-140,53,label=gear1,color="white",size=4)+annotate("text",-138,51,label=paste("Grid cells < minimum vessels = ",notenough,sep=""),color="white",size=3)+theme(panel.background=element_rect(fill="transparent",colour=NA),legend.position="bottom")}
+  if(extent2[1]>0){ m1<-m1+annotate("text",160,50,label=year1,color="white",size=4)+annotate("text",160,49,label=gear1,color="white",size=4)+annotate("text",175,49,label=paste("Grid cells < minimum vessels = ",notenough,sep=""),color="white",size=3)+theme(panel.background=element_rect(fill="transparent",colour=NA),legend.position="bottom")}
     print(m1)
 
     png(paste0(year1,"_",gear1,"_",res1,".png"),height=7,width=7,unit="in",res=300)
