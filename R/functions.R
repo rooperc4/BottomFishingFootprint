@@ -47,7 +47,9 @@
 
 
 footprint_data<-function(Year,Longitude,Latitude,Gear_type,Vessel_ID,Minimum_vessels=3,Start_year,Years_to_combine,Spatial_resolution=.5,Units="dd", map_projection=NULL){
-
+require(dplyr)
+require(rgdal)
+require(sp)
 
   if(Units=="dd"){
     LONGITUDE<-round_any(Longitude,Spatial_resolution)
@@ -118,12 +120,18 @@ footprint_data<-function(Year,Longitude,Latitude,Gear_type,Vessel_ID,Minimum_ves
 
 
 footprint_map<-function(footprint_data_object){
+require(ggmap)
+require(viridis)
+require(sp)
+require(dplyr)
+require(rgdal)
+
  # footprint_data_object<-example_dd
 Spatial_resolution<-footprint_data_object$spatial_resolution
 Units<-footprint_data_object$units
 map_projection<-footprint_data_object$map_projection
 fishing_effort<-footprint_data_object$fishing_effort_data
-extent1<-extent(c(min(as.numeric(as.character(fishing_effort$LONGITUDE))),max(as.numeric(as.character(fishing_effort$LONGITUDE))),min(as.numeric(as.character(fishing_effort$LATITUDE))),max(as.numeric(as.character(fishing_effort$LATITUDE)))))
+extent1<-extent(c(min(as.numeric(as.character(fishing_effort$LONGITUDE)),na.rm=TRUE),max(as.numeric(as.character(fishing_effort$LONGITUDE)),na.rm=TRUE),min(as.numeric(as.character(fishing_effort$LATITUDE)),na.rm=TRUE),max(as.numeric(as.character(fishing_effort$LATITUDE)),na.rm=TRUE)))
 raster1<-raster(extent1,resolution=Spatial_resolution,crs=map_projection)
 raster.stack<-stack(raster1)
 
